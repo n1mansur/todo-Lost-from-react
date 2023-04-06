@@ -1,0 +1,15 @@
+.form__btn {
+  width: 60px;
+  height: 40px;
+  //background: rgba(52, 67, 69, 1);
+  background: rgba(0, 68, 255, 0.3);
+  border-radius: 6px;
+  color: #fff;
+  border: none;
+  &:hover {
+    background: rgba(0, 68, 255, 0.7);
+  }
+  &:active {
+    background: rgba(0, 31, 117, 0.7);
+  }
+}

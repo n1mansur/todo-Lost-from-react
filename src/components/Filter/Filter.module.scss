@@ -1,0 +1,18 @@
+.filter {
+  color: #fff;
+}
+select {
+  border-radius: 8px;
+  border: none;
+  background: rgba(52, 67, 69, 0.1);
+  color: #fff;
+  padding: 5px;
+  &:hover {
+    //box-shadow: 0 0 10px rgba(52, 67, 69, 0.5);
+    box-shadow: 0 0 10px #fff3;
+  }
+}
+.span {
+  margin-right: 10px;
+  color: #fff;
+}

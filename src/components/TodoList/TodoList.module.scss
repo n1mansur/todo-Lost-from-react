@@ -1,0 +1,13 @@
+.list {
+  width: 438px;
+  height: 284px;
+  padding: 10px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+  margin-bottom: 10px;
+}
