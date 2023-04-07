@@ -18,6 +18,7 @@ function App() {
         value: value,
         id: new Date().getTime(),
         date: dateFormatter(new Date()),
+        isDone: false,
       }
       setTodos([newTodo, ...todos])
       e.target.elements['todo'].value = ''
@@ -29,8 +30,8 @@ function App() {
     }
   }
   const [todos, setTodos] = useState([
-    { value: 'Coding', id: 2, date: '20:00 23.03.2023' },
-    { value: 'Watch TV', id: 1, date: '20:00 23.03.2023' },
+    { value: 'Coding', id: 2, date: '20:00 23.03.2023', isDone: true },
+    { value: 'Watch TV', id: 1, date: '20:00 23.03.2023', isDone: false },
   ])
   //localStorage.setItem(todos, JSON.stringify(todos))
   //JSON.parse(localStorage.getItem('todos'))
@@ -38,7 +39,7 @@ function App() {
     return (
       <TodoItem
         key={v.id}
-        value={v}
+        element={v}
         num={i}
         todos={todos}
         setTodos={setTodos}
