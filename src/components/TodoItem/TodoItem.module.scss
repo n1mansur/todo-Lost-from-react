@@ -5,7 +5,7 @@
   min-height: 58px;
   border-radius: 8px;
   position: relative;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   border: 1px solid transparent;
   //background: rgba(52, 67, 69, 0.2);
   background: transparent;
@@ -44,6 +44,18 @@
       color: rgba(52, 67, 69, 1);
     }
   }
+  animation: createEffect 1s forwards;
+}
+//.create-effect {
+//  animation: createEffect 1s forwards;
+//}
+@keyframes createEffect {
+  0% {
+    margin-top: -58px;
+  }
+  100% {
+    margin-top: 0;
+  }
 }
 .nth {
   left: -30px;
@@ -68,6 +80,7 @@
   position: relative;
 }
 .label {
+  cursor: pointer;
   width: 15px;
   height: 15px;
   border: 1px solid #fff;

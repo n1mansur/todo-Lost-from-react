@@ -6,7 +6,7 @@ import TodoItem from './components/TodoItem/TodoItem'
 import TodoList from './components/TodoList/TodoList'
 import Filter from './components/Filter/Filter'
 import Clear from './components/Clear/Clear'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dateFormatter from './functions/dateFormatter'
 
 function App() {
@@ -33,9 +33,28 @@ function App() {
     { value: 'Coding', id: 2, date: '20:00 23.03.2023', isDone: true },
     { value: 'Watch TV', id: 1, date: '20:00 23.03.2023', isDone: false },
   ])
-  //localStorage.setItem(todos, JSON.stringify(todos))
-  //JSON.parse(localStorage.getItem('todos'))
-  const mapItems = todos.map((v, i) => {
+  useEffect(() => {
+    const raw = localStorage.getItem('todos') || []
+    setTodos(JSON.parse(raw))
+  }, [])
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos])
+  const [filtered, setFiltered] = useState(todos)
+  const filteredByStatus = (value) => {
+    switch (value) {
+      case 'completed':
+        setFiltered(todos.filter((todo) => todo.isDone))
+        break
+      case 'proccess':
+        setFiltered(todos.filter((todo) => !todo.isDone))
+        break
+      default:
+        setFiltered(todos)
+        break
+    }
+  }
+  const mapItems = filtered.map((v, i) => {
     return (
       <TodoItem
         key={v.id}
@@ -49,6 +68,17 @@ function App() {
   const clear = () => {
     setTodos([])
   }
+  document.addEventListener('keydown', (e) => {
+    if (e.code == 'KeyT') {
+      console.log(todos)
+    }
+  })
+  const getFilterValue = (e) => {
+    filteredByStatus(e.target.value)
+  }
+  useEffect(() => {
+    setFiltered(todos)
+  }, [todos])
   return (
     <div className="wrapper">
       <div className="wrapper__container container">
@@ -67,7 +97,7 @@ function App() {
               />
               <Button text="Add" type="submit" />
             </form>
-            <Filter />
+            <Filter getFilterValue={getFilterValue} />
             <TodoList>{mapItems}</TodoList>
           </div>
           <Clear f={clear} />
