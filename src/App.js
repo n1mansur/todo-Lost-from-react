@@ -1,6 +1,5 @@
 import './App.scss'
 import 'boxicons'
-import Button from './components/Button/Button'
 import Title from './components/Title/Title'
 import TodoItem from './components/TodoItem/TodoItem'
 import TodoList from './components/TodoList/TodoList'
@@ -8,6 +7,7 @@ import Filter from './components/Filter/Filter'
 import Clear from './components/Clear/Clear'
 import { useEffect, useState } from 'react'
 import dateFormatter from './functions/dateFormatter'
+import Form from './components/Form/Form'
 
 function App() {
   const getInputValue = (e) => {
@@ -30,9 +30,10 @@ function App() {
     }
   }
   const [todos, setTodos] = useState([
-    { value: 'Coding', id: 2, date: '20:00 23.03.2023', isDone: true },
-    { value: 'Watch TV', id: 1, date: '20:00 23.03.2023', isDone: false },
+    //{ value: 'Coding', id: 2, date: '20:00 23.03.2023', isDone: true },
+    //{ value: 'Watch TV', id: 1, date: '20:00 23.03.2023', isDone: false },
   ])
+  const [type, setType] = useState('all')
   useEffect(() => {
     const raw = localStorage.getItem('todos') || []
     setTodos(JSON.parse(raw))
@@ -40,21 +41,14 @@ function App() {
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [todos])
-  const [filtered, setFiltered] = useState(todos)
-  const filteredByStatus = (value) => {
-    switch (value) {
-      case 'completed':
-        setFiltered(todos.filter((todo) => todo.isDone))
-        break
-      case 'proccess':
-        setFiltered(todos.filter((todo) => !todo.isDone))
-        break
-      default:
-        setFiltered(todos)
-        break
-    }
-  }
-  const mapItems = filtered.map((v, i) => {
+  const filteredByType = (type, todos) =>
+    todos.filter((v) => {
+      if (type == 'all') return true
+      if (type == 'completed') return v.isDone
+      if (type == 'proccess') return !v.isDone
+    })
+
+  const mapItems = filteredByType(type, todos).map((v, i) => {
     return (
       <TodoItem
         key={v.id}
@@ -73,12 +67,6 @@ function App() {
       console.log(todos)
     }
   })
-  const getFilterValue = (e) => {
-    filteredByStatus(e.target.value)
-  }
-  useEffect(() => {
-    setFiltered(todos)
-  }, [todos])
   return (
     <div className="wrapper">
       <div className="wrapper__container container">
@@ -87,17 +75,8 @@ function App() {
         </header>
         <div className="main">
           <div className="main__content">
-            <form className="form" onSubmit={getInputValue}>
-              <input
-                placeholder="Text input"
-                className="form__inp"
-                type="text"
-                name="todo"
-                id="listValue"
-              />
-              <Button text="Add" type="submit" />
-            </form>
-            <Filter getFilterValue={getFilterValue} />
+            <Form getInputValue={getInputValue} />
+            <Filter setType={setType} />
             <TodoList>{mapItems}</TodoList>
           </div>
           <Clear f={clear} />

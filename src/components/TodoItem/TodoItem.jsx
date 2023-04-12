@@ -2,8 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import Styles from './TodoItem.module.scss'
 
 export default function TodoItem({ element, num, todos, setTodos }) {
-  let dropIndex, dragIndex
+  const styleIsDone = element.isDone ? 'line-through' : ''
+  const isDisplayEdit = element.isDone ? 'none' : ''
   const inputRef = useRef()
+  const [isDisablet, setIsDisabled] = useState(true)
+  const [value, setValue] = useState(element.value)
   const focusInp = () => {
     inputRef.current.focus()
     //console.log(inputRef.current)
@@ -19,8 +22,6 @@ export default function TodoItem({ element, num, todos, setTodos }) {
       setTodos(todos.filter((el) => el.id != currentId))
     }, 500)
   }
-  const [isDisablet, setIsDisabled] = useState(true)
-  const [value, setValue] = useState(element.value)
   const saveBtn = () => {
     setTodos((old) =>
       old.map((v) => (v.id === element.id ? { ...v, value } : v))
@@ -55,50 +56,14 @@ export default function TodoItem({ element, num, todos, setTodos }) {
     setIsDisabled(false)
     focusInp()
   }
-  const blurFn = (e) => {
-    //  setTimeout(() => {
-    //    console.log('blur')
-    //    setValue(element.value)
-    //    setIsDisabled(true)
-    //  }, 100)
-  }
   const checkFn = (e) => {
     const currentId = e.target.closest(`.${Styles.item}`)?.id
     const index = todos.findIndex((v) => v.id == currentId)
     todos[index].isDone = !todos[index].isDone
     setTodos(todos.map((el) => el))
   }
-  const dragStart = (e) => {
-    setTimeout(() => e.target.classList.add('dragging'), 0)
-    const currentId = e.target.closest(`.${Styles.item}`)?.id
-    dragIndex = todos.findIndex((v) => v.id == currentId)
-    //console.log('dragStart')
-  }
-  const drop = (e) => {
-    e.preventDefault()
-    const currentId = e.target.closest(`.${Styles.item}`)?.id
-    dropIndex = todos.findIndex((v) => v.id == currentId)
-    console.log('drop')
-  }
-  const dragEnd = (e) => {
-    //console.log(dragIndex)
-    console.log(dropIndex)
-    //let a = todos.splice(dragIndex, 1)
-    //todos.splice(dropIndex, 0, a[0])
-    //e.preventDefault()
-    //e.target.classList.remove('dragging')
-    //console.log('end')
-  }
   return (
-    <li
-      className={Styles.item}
-      draggable="true"
-      id={element.id}
-      onDragStart={(e) => dragStart(e)}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) => drop(e)}
-      onDragEnd={(e) => dragEnd(e)}
-    >
+    <li className={Styles.item} id={element.id}>
       <span className={Styles.nth}>{num + 1}</span>
       <div className={Styles.item__section}>
         <div className={Styles.date}>
@@ -135,12 +100,17 @@ export default function TodoItem({ element, num, todos, setTodos }) {
               onChange(e)
             }}
             id={`inp${element.id}`}
+            style={{ textDecoration: styleIsDone }}
           />
         </div>
       </div>
       <div className={Styles.item__btns}>
         {isDisablet ? (
-          <button className={Styles.item__btn} onClick={(e) => editBtn(e)}>
+          <button
+            style={{ display: isDisplayEdit }}
+            className={Styles.item__btn}
+            onClick={(e) => editBtn(e)}
+          >
             <box-icon color={'#fff'} type="solid" name="pencil"></box-icon>
           </button>
         ) : (
