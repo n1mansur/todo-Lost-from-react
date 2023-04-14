@@ -7,9 +7,5 @@ document.addEventListener('keydown', (e) => {
   }
 })
 export default function TodoList({ children }) {
-  return (
-    <ul className={Styles.list}>
-      {children}
-    </ul>
-  )
+  return <ul className={Styles.list}>{children}</ul>
 }
