@@ -8,9 +8,10 @@ import { createContext, useEffect, useState } from 'react'
 import Form from './components/Form/Form'
 import getInputValue from './functions/getInputValue'
 import mapItems from './functions/mapItems'
+import { MainContext } from './store/context'
 
-export const MainContext = createContext()
 function App() {
+  console.log('app')
   const [todos, setTodos] = useState([])
   const [type, setType] = useState('all')
   useEffect(() => {
@@ -23,11 +24,7 @@ function App() {
   const clear = () => {
     setTodos([])
   }
-  //document.addEventListener('keydown', (e) => {
-  //  if (e.code == 'KeyT') {
-  //    console.log(todos)
-  //  }
-  //})
+
   return (
     <MainContext.Provider value={setTodos}>
       <div className="wrapper">
