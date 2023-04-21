@@ -1,6 +1,7 @@
 import dateFormatter from '../functions/dateFormatter'
+import { addActionCreater } from '../redux/Rducer'
 
-export default function getInputValue(e, todos, setTodos) {
+export default function getInputValue(e, todos, setTodos, dispatch) {
   e.preventDefault()
   let value = e.target.elements['todo'].value
   if (value) {
@@ -10,6 +11,7 @@ export default function getInputValue(e, todos, setTodos) {
       date: dateFormatter(new Date()),
       isDone: false,
     }
+    dispatch(addActionCreater(newTodo))
     setTodos([newTodo, ...todos])
     e.target.elements['todo'].value = ''
   } else {

@@ -9,18 +9,29 @@ import Form from './components/Form/Form'
 import getInputValue from './functions/getInputValue'
 import mapItems from './functions/mapItems'
 import { MainContext } from './store/context'
+import { useDispatch, useSelector } from 'react-redux'
+import { setActionCreater } from './redux/Rducer'
 
 function App() {
-  console.log('app')
   const [todos, setTodos] = useState([])
   const [type, setType] = useState('all')
+  const todosFromRedux = useSelector((state) => state)
+  const dispatch = useDispatch()
+  console.log(todosFromRedux)
+
+  const url = 'https://644131f3792fe886a8a0f728.mockapi.io/todos'
+  async function fetchTodos() {
+    const res = await fetch(url)
+    const data = await res.json()
+    console.log('data', data)
+    return data
+  }
   useEffect(() => {
-    const raw = localStorage.getItem('todos') || []
-    setTodos(JSON.parse(raw))
+    fetchTodos().then((res) => dispatch(setActionCreater(res)))
   }, [])
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos))
-  }, [todos])
+    localStorage.setItem('todos', JSON.stringify(todosFromRedux))
+  }, [todosFromRedux])
   const clear = () => {
     setTodos([])
   }
@@ -40,7 +51,7 @@ function App() {
                 setTodos={setTodos}
               />
               <Filter setType={setType} />
-              <TodoList>{mapItems(type, todos, setTodos)}</TodoList>
+              <TodoList>{mapItems(type, todosFromRedux, setTodos)}</TodoList>
             </div>
             <Clear f={clear} />
           </div>
